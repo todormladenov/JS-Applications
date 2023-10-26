@@ -7,21 +7,25 @@ function loadRepos() {
 		.then(res => res.json())
 		.then(repos => {
 			reposElement.innerHTML = '';
+			if (Array.isArray(repos)) {
+				repos.forEach((repo) => {
+					let liElement = document.createElement('li');
+	
+					let aRepoElement = document.createElement('a');
+					aRepoElement.textContent = repo.full_name;
+					aRepoElement.href = repo.html_url;
+	
+					liElement.appendChild(aRepoElement)
+					reposElement.appendChild(liElement);
+				});
+			} else {
+				throw new Error ('Invalid data!')
+			}
 
-			repos.forEach((repo) => {
-				let liElement = document.createElement('li');
-
-				let aRepoElement = document.createElement('a');
-				aRepoElement.textContent = repo.full_name;
-				aRepoElement.href = repo.html_url;
-
-				liElement.appendChild(aRepoElement)
-				reposElement.appendChild(liElement);
-			});
 		})
 		.catch((err) => {
 			let liElement = document.createElement('li');
-			liElement.textContent = `Error: 404 (Not Found)`;
+			liElement.textContent = `Error: ${err.message}`;
 
 			reposElement.appendChild(liElement);
 
