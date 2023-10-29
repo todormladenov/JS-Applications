@@ -10,7 +10,7 @@ function solve() {
 
     function depart() {
         fetch('http://localhost:3030/jsonstore/bus/schedule/' + stop.next)
-        .then(response => response.json())
+        .then(response =>   response.json())
         .then(schedule => {
             stop.name = schedule.name;
             stop.next = schedule.next;
