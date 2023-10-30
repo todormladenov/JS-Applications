@@ -19,6 +19,8 @@ async function lockedProfile() {
         let btnElement = newProfile.querySelector('button');
         let userInfoElements = newProfile.querySelectorAll('.profile input');
         let userDataElements = newProfile.querySelector('.user1Username');
+        userDataElements.classList.remove('user1Username');
+        userDataElements.classList.add('user1HiddenFields');
         userDataElements.style.display = 'none';
 
         let [lockElement, unlockElement, usernameElement, emailElement, ageElement] = userInfoElements;
