@@ -7,10 +7,6 @@ function getInfo() {
     fetch(baseUrl + stopIdElement.value)
         .then(response => {
             busesElement.replaceChildren();
-
-            if (response.status != 200 || stopIdElement.value == '') {
-                throw new Error('Error');
-            }
             stopIdElement.value = '';
             return response.json();
         })
@@ -25,7 +21,7 @@ function getInfo() {
             })
         })
         .catch(err => {
-            stopNameElement.textContent = err.message;
+            stopNameElement.textContent = 'Error';
         })
 
 }
