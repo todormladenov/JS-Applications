@@ -11,7 +11,7 @@ function getInfo() {
             if (response.status != 200 || stopIdElement.value == '') {
                 throw new Error('Error');
             }
-
+            stopIdElement.value = '';
             return response.json();
         })
         .then(busesInfo => {
