@@ -12,24 +12,29 @@ async function lockedProfile() {
     });
 
     function createProfile(profile) {
-        let newProfile = templateProfileElement.cloneNode();
+        let newProfile = document.createElement('div');
+        newProfile.classList.add('profile');
         newProfile.innerHTML = templateProfileElement.innerHTML;
         mainElement.appendChild(newProfile);
 
         let btnElement = newProfile.querySelector('button');
         let userInfoElements = newProfile.querySelectorAll('.profile input');
         let userDataElements = newProfile.querySelector('.user1Username');
-        userDataElements.classList.remove('user1Username');
-        userDataElements.classList.add('user1HiddenFields');
+
         userDataElements.style.display = 'none';
 
         let [lockElement, unlockElement, usernameElement, emailElement, ageElement] = userInfoElements;
+
+        lockElement.name = `user${profile[0]}Locked`;
+        unlockElement.name = `user${profile[0]}Locked`;
         lockElement.checked = true;
+        
         usernameElement.value = profile[1].username;
         emailElement.value = profile[1].email;
         ageElement.value = profile[1].age;
 
         btnElement.addEventListener('click', () => {
+            
             if (unlockElement.checked) {
                 if (userDataElements.style.display == 'none') {
                     userDataElements.style.display = 'block';
