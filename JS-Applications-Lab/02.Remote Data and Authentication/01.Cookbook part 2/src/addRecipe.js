@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
         let recipeData = getFormData();
         let url = 'http://localhost:3030/data/recipes';
         try {
-            debugger
+            
             let response = await fetch(url, {
                 method: 'post',
                 headers: {

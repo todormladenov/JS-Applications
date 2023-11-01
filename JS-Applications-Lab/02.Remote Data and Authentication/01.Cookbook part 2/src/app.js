@@ -16,6 +16,7 @@ window.addEventListener('load', async () => {
     let main = document.querySelector('main');
     let guestElement = document.getElementById('guest');
     let userElement = document.getElementById('user');
+    let logoutBtnElement = document.getElementById('logoutBtn');
 
     if (!localStorage.accessToken) {
         guestElement.style.display = 'inline-block';
@@ -23,8 +24,8 @@ window.addEventListener('load', async () => {
         userElement.style.display = 'inline-block';
     }
 
+    logoutBtnElement.addEventListener('click', logout);
 
-    
     main.innerHTML = '';
     let recipes = await getRecipes();
 
@@ -38,6 +39,11 @@ window.addEventListener('load', async () => {
         });
     });
 });
+
+function logout(){
+    localStorage.clear();
+    window.location.reload();
+}
 
 function createRecipe(recipe) {
     let main = document.querySelector('main');
