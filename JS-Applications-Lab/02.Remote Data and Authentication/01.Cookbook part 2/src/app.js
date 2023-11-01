@@ -14,9 +14,16 @@ async function getRecipeById(id) {
 
 window.addEventListener('load', async () => {
     let main = document.querySelector('main');
-
     let guestElement = document.getElementById('guest');
-    guestElement.style.display = 'inline-block';
+    let userElement = document.getElementById('user');
+
+    if (!localStorage.accessToken) {
+        guestElement.style.display = 'inline-block';
+    } else {
+        userElement.style.display = 'inline-block';
+    }
+
+
     
     main.innerHTML = '';
     let recipes = await getRecipes();
