@@ -54,10 +54,10 @@ function attachEvents() {
         let posts = await getPosts();
 
         let foundComments = comments.filter(comment => comment.postId == selectedPostId);
-        let foundPost = posts.find(post => post.id == selectedPostId);
-
-        postTitleElement.textContent = foundPost.title;
-        postBodyElement.textContent = foundPost.body;
+        let foundPost = posts.filter(post => post.id == selectedPostId);
+        debugger
+        postTitleElement.textContent = foundPost[0].title;
+        postBodyElement.textContent = foundPost[0].body;
 
         postCommentsElement.innerHTML = '';
 
