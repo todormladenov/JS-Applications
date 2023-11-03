@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
 	"-LxHVtajG3N1sU714pVj": {
 		"author": "Spami",
@@ -19,4 +20,27 @@
 		"author": "Spami",
 		"content": "Hello, George nice to see you! :)))"
 	}
+=======
+{
+	"-LxHVtajG3N1sU714pVj": {
+		"author": "Spami",
+		"content": "Hello, are you there?"
+	},
+	"-LxIDxC-GotWtf4eHwV8": {
+		"author": "Garry",
+		"content": "Yep, whats up :?"
+	},
+	"-LxIDxPfhsNipDrOQ5g_": {
+		"author": "Spami",
+		"content": "How are you? Long time no see? :)"
+	},
+	"-LxIE-dM_msaz1O9MouM": {
+		"author": "George",
+		"content": "Hello, guys! :))"
+	},
+	"-LxLgX_nOIiuvbwmxt8w": {
+		"author": "Spami",
+		"content": "Hello, George nice to see you! :)))"
+	}
+>>>>>>> 74c4e2477c3f636cc0044cc2abcf75631a23868a
 }
