@@ -21,9 +21,8 @@ window.addEventListener('load', () => {
             return;
         }
 
-        localStorage.setItem(user, JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
         notificationElement.textContent = `Hello ${user.email} you have registered successful!`;
-
     }
 
     function getFormData() {
