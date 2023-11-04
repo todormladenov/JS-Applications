@@ -3,7 +3,8 @@ window.addEventListener('load', () => {
     userInfo = JSON.parse(userInfo);
 
     let userElement = document.getElementById('user');
-    let guestElement = document.getElementById('guest'); 
+    let guestElement = document.getElementById('guest');
+    let logoutElement = document.getElementById('logout'); 
     let welcomeMessageElement = document.querySelector('.email span');
     
     if (userInfo.accessToken) {
@@ -15,4 +16,8 @@ window.addEventListener('load', () => {
         guestElement.style.display = 'inline';
     }
 
+    logoutElement.addEventListener('click', () => {
+        localStorage.clear();
+        location.reload();
+    })
 });
