@@ -31,9 +31,14 @@ window.addEventListener('load', () => {
     async function loadAllCatches() {
         try {
             let response = await fetch(catchURL);
+            if (response.status != 200) {
+                let error = await response.json();
+                throw new Error(`${error.message}`);
+            }
+
             let catches = await response.json();
             catchesElement.innerHTML = '';
-    
+
             catches.forEach(element => {
                 const catchElement = generateCatch(element);
                 catchesElement.appendChild(catchElement);
@@ -46,7 +51,6 @@ window.addEventListener('load', () => {
     async function addCatch(e) {
         e.preventDefault();
         let formData = getFormData();
-
         try {
             let response = await fetch(catchURL, {
                 method: 'POST',
@@ -56,10 +60,15 @@ window.addEventListener('load', () => {
                 },
                 body: JSON.stringify(formData)
             })
+            if (response.status != 200) {
+                let error = await response.json();
+                throw new Error(`${error.message}`);
+            }
+
             let data = await response.json();
             let newCatchElement = generateCatch(data);
             catchesElement.appendChild(newCatchElement);
-            clearInputs();
+            addFormElement.reset();
         } catch (error) {
             alert(`Error: ${error.message}`)
         }
@@ -125,11 +134,4 @@ window.addEventListener('load', () => {
         localStorage.clear();
         location.reload();
     })
-
-    function clearInputs() {
-        let formInputs = addFormElement.querySelectorAll('input');
-        formInputs.forEach(inputField => {
-            inputField.value = '';
-        });
-    }
 });
