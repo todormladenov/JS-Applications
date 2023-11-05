@@ -17,15 +17,16 @@ window.addEventListener('load', () => {
     loadBtnElement.addEventListener('click', loadAllCatches);
     addFormElement.addEventListener('submit', addCatch);
 
-    if (userInfo.accessToken) {
+    if (!userInfo) {
+        userElement.style.display = 'none';
+        logoutElement.style.display = 'none';
+        guestElement.style.display = 'inline';
+        addElement.disabled = true;
+    } else {
         userElement.style.display = 'inline';
         guestElement.style.display = 'none';
         addElement.disabled = false;
         welcomeMessageElement.textContent = userInfo.email;
-    } else {
-        userElement.style.display = 'none';
-        guestElement.style.display = 'inline';
-        addElement.disabled = true;
     }
 
     async function loadAllCatches() {
@@ -87,12 +88,56 @@ window.addEventListener('load', () => {
                 let error = await response.json();
                 throw new Error(error.message);
             }
-            
+
             targetElement.parentNode.remove();
         } catch (error) {
             alert(`Error: ${error.message}`);
         }
 
+    }
+
+    async function onUpdate(e) {
+        let targetElement = e.currentTarget;
+        let id = targetElement.dataset.id;
+
+        let parentElement = e.currentTarget.parentNode;
+        let updatedData = getUpdatedData(parentElement);
+
+        try {
+            let response = await fetch(`${catchURL}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                    'x-authorization': userInfo.accessToken
+                },
+                body: JSON.stringify(updatedData)
+            });
+            if (response.status != 200) {
+                let error = response.json();
+                throw new Error(error);
+            }
+
+            let data = await response.json();
+            generateCatch(data);
+        } catch (error) {
+            alert(`Error: ${error.message}`)
+        }
+    }
+
+    function getUpdatedData(element) {
+        let inputs = element.querySelectorAll('input');
+        let updatedData = {};
+
+        Array.from(inputs).forEach(input => {
+            input.disabled = false;
+            let key = input.className;
+            let value = input.value;
+
+            updatedData[key] = value;
+        });
+
+        // updatedData._ownerId = userInfo.accessToken;
+        return updatedData;
     }
 
     function getFormData() {
@@ -122,30 +167,35 @@ window.addEventListener('load', () => {
     function generateCatch(element) {
         const div = document.createElement('div');
         div.setAttribute('class', 'catch');
-        div.setAttribute('id', element._ownerId);
+        let isOwner = false;
+        if (userInfo) {
+            if (element._ownerId == userInfo._id) {
+             isOwner = true;   
+            }
+        }
         div.innerHTML = `                    
         <label>Angler</label>
-        <input type="text" class="angler" value="${element.angler}" disabled>
+        <input type="text" class="angler" value="${element.angler}" ${!isOwner ? 'disabled' : ''}>
         <label>Weight</label>
-        <input type="text" class="weight" value="${element.weight}" disabled>
+        <input type="text" class="weight" value="${element.weight}" ${!isOwner ? 'disabled' : ''}>
         <label>Species</label>
-        <input type="text" class="species" value="${element.species}" disabled>
+        <input type="text" class="species" value="${element.species}" ${!isOwner ? 'disabled' : ''}>
         <label>Location</label>
-        <input type="text" class="location" value="${element.location}" disabled>
+        <input type="text" class="location" value="${element.location}" ${!isOwner ? 'disabled' : ''}>
         <label>Bait</label>
-        <input type="text" class="bait" value="${element.bait}" disabled>
+        <input type="text" class="bait" value="${element.bait}" ${!isOwner ? 'disabled' : ''}>
         <label>Capture Time</label>
-        <input type="number" class="captureTime" value="${element.captureTime}" disabled>
+        <input type="number" class="captureTime" value="${element.captureTime}" ${!isOwner ? 'disabled' : ''}>
         <button class="update" data-id="${element._id}" disabled>Update</button>
         <button class="delete" data-id="${element._id}" disabled>Delete</button>`;
 
-        if (div.id == userInfo._id) {
-            div.querySelectorAll('button').forEach(btn => {
+        if (isOwner) {
+            Array.from(div.querySelectorAll('button')).forEach(btn => {
                 btn.disabled = false;
                 if (btn.classList.contains('delete')) {
                     btn.addEventListener('click', onDelete);
                 } else {
-                    // btn.addEventListener('update', onUpdate)
+                    btn.addEventListener('click', onUpdate)
                 }
             });
 
