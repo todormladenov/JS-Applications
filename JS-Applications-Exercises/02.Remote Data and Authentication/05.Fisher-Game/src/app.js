@@ -75,6 +75,26 @@ window.addEventListener('load', () => {
 
     }
 
+    async function onDelete(e) {
+        let targetElement = e.currentTarget;
+        let id = targetElement.dataset.id;
+        try {
+            let response = await fetch(`${catchURL}/${id}`, {
+                method: 'DELETE',
+                headers: { 'x-authorization': userInfo.accessToken }
+            });
+            if (response.status != 200) {
+                let error = await response.json();
+                throw new Error(error.message);
+            }
+            
+            targetElement.parentNode.remove();
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+
+    }
+
     function getFormData() {
         let formData = new FormData(addFormElement);
 
@@ -116,11 +136,19 @@ window.addEventListener('load', () => {
         <input type="text" class="bait" value="${element.bait}" disabled>
         <label>Capture Time</label>
         <input type="number" class="captureTime" value="${element.captureTime}" disabled>
-        <button class="update" data-id="${element._ownerId}" disabled>Update</button>
-        <button class="delete" data-id="${element._ownerId}" disabled>Delete</button>`;
+        <button class="update" data-id="${element._id}" disabled>Update</button>
+        <button class="delete" data-id="${element._id}" disabled>Delete</button>`;
 
         if (div.id == userInfo._id) {
-            div.querySelectorAll('button').forEach(btn => btn.disabled = false);
+            div.querySelectorAll('button').forEach(btn => {
+                btn.disabled = false;
+                if (btn.classList.contains('delete')) {
+                    btn.addEventListener('click', onDelete);
+                } else {
+                    // btn.addEventListener('update', onUpdate)
+                }
+            });
+
         }
 
         return div;
