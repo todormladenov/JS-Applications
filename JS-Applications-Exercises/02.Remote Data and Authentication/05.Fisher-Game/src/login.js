@@ -23,6 +23,7 @@ window.addEventListener('load', () => {
         }
 
         localStorage.setItem('user', JSON.stringify(user));
+        window.location.href = './index.html';
     }
 
     function getFormData() {

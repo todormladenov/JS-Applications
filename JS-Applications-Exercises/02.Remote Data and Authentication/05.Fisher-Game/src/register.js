@@ -22,7 +22,7 @@ window.addEventListener('load', () => {
         }
 
         localStorage.setItem('user', JSON.stringify(user));
-        notificationElement.textContent = `Hello ${user.email} you have registered successful!`;
+        window.location.href = './index.html';
     }
 
     function getFormData() {
