@@ -15,6 +15,7 @@ window.addEventListener('load', () => {
     catchesElement.innerHTML = '';
 
     loadBtnElement.addEventListener('click', loadAllCatches);
+    addFormElement.addEventListener('submit', addCatch);
 
     if (userInfo.accessToken) {
         userElement.style.display = 'inline';
@@ -28,19 +29,71 @@ window.addEventListener('load', () => {
     }
 
     async function loadAllCatches() {
-        let response = await fetch(catchURL);
-        let catches = await response.json();
+        try {
+            let response = await fetch(catchURL);
+            let catches = await response.json();
+            catchesElement.innerHTML = '';
+    
+            catches.forEach(element => {
+                const catchElement = generateCatch(element);
+                catchesElement.appendChild(catchElement);
+            });
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    }
 
-        catches.forEach(element => {
-            const catchElement = generateCatch(element);
-            catchesElement.appendChild(catchElement);
-        });
+    async function addCatch(e) {
+        e.preventDefault();
+        let formData = getFormData();
+
+        try {
+            let response = await fetch(catchURL, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'x-authorization': userInfo.accessToken
+                },
+                body: JSON.stringify(formData)
+            })
+            let data = await response.json();
+            let newCatchElement = generateCatch(data);
+            catchesElement.appendChild(newCatchElement);
+            clearInputs();
+        } catch (error) {
+            alert(`Error: ${error.message}`)
+        }
+
+    }
+
+    function getFormData() {
+        let formData = new FormData(addFormElement);
+
+        let angler = formData.get('angler');
+        let weight = formData.get('weight');
+        let species = formData.get('species');
+        let location = formData.get('location');
+        let bait = formData.get('bait');
+        let captureTime = formData.get('captureTime');
+
+        if (angler == '' || weight == '' || species == '' || location == '' || bait == '' || captureTime == '') {
+            return
+        }
+
+        return {
+            angler,
+            weight,
+            species,
+            location,
+            bait,
+            captureTime
+        }
     }
 
     function generateCatch(element) {
         const div = document.createElement('div');
         div.setAttribute('class', 'catch');
-        div.setAttribute('id', element._id);
+        div.setAttribute('id', element._ownerId);
         div.innerHTML = `                    
         <label>Angler</label>
         <input type="text" class="angler" value="${element.angler}" disabled>
@@ -54,11 +107,11 @@ window.addEventListener('load', () => {
         <input type="text" class="bait" value="${element.bait}" disabled>
         <label>Capture Time</label>
         <input type="number" class="captureTime" value="${element.captureTime}" disabled>
-        <button class="update" data-id="${element._id}" disabled>Update</button>
-        <button class="delete" data-id="${element._id}" disabled>Delete</button>`;
+        <button class="update" data-id="${element._ownerId}" disabled>Update</button>
+        <button class="delete" data-id="${element._ownerId}" disabled>Delete</button>`;
 
-        if (div.id == userInfo.accessToken) {
-            div.querySelectorAll('button').map(btn => btn.disabled = false);
+        if (div.id == userInfo._id) {
+            div.querySelectorAll('button').forEach(btn => btn.disabled = false);
         }
 
         return div;
@@ -72,4 +125,11 @@ window.addEventListener('load', () => {
         localStorage.clear();
         location.reload();
     })
+
+    function clearInputs() {
+        let formInputs = addFormElement.querySelectorAll('input');
+        formInputs.forEach(inputField => {
+            inputField.value = '';
+        });
+    }
 });
