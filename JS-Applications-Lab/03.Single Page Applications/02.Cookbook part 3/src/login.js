@@ -24,7 +24,7 @@ async function login(e) {
         })
         if (response.status != 200) {
             let error = await response.json();
-            throw new Error(error)
+            throw new Error(error.message);
         }
 
         let user = await response.json();
