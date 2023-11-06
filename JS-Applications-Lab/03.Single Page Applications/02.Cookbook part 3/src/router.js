@@ -13,7 +13,6 @@ const routes = {
 }
 
 export function router(path) {
-    
     hideFields();
 
     const renderer = routes[path];

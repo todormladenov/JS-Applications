@@ -1,19 +1,8 @@
 import { router } from "./router.js";
+import { auth } from "./authentication.js";
 
-const guestElement = document.getElementById('guest');
-const userElement = document.getElementById('user');
+auth();
 const navigationElement = document.querySelector('.navigation');
-
-const accessToken = localStorage.getItem('accessToken');
-
-if (accessToken) {
-    guestElement.style.display = 'none';
-    userElement.style.display = 'inline';
-} else {
-    guestElement.style.display = 'inline';
-    userElement.style.display = 'none';
-}
-
 
 navigationElement.addEventListener('click', (e) => {
     e.preventDefault();
