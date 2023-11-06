@@ -1,3 +1,5 @@
+import { addDetails } from "./showMore.js";
+
 const url = 'http://localhost:3030/data/recipes'
 const homeSection = document.querySelector('.home');
 
@@ -7,9 +9,14 @@ export async function renderHome() {
     
     homeSection.innerHTML = '';
     recipes.forEach(recipe => {
-        showRecipes(recipe);
+        let recipeElement = showRecipes(recipe);
+        let detailsRecipeElement = addDetails(recipe);
+        
+        recipeElement.addEventListener('click', () => {
+            homeSection.replaceChildren(detailsRecipeElement);
+        });
     });
-
+    
     homeSection.style.display = 'block';
 }
 
@@ -23,6 +30,8 @@ function showRecipes(recipe) {
                 <div class="small">
                     <img src="${recipe.img}">
                 </div>`;
-                
+
     homeSection.appendChild(recipeElement);
+
+    return recipeElement;
 }
