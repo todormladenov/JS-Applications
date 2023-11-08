@@ -1,17 +1,22 @@
+import { clearSections } from "./router.js";
+
 const userElements = document.querySelectorAll('.user');
 const guestElements = document.querySelectorAll('.guest');
-const accessToken = getAuthToken();
+const welcomeMsgElement = document.getElementById('welcome-msg');
 
-export function getAuthToken(){
-    const user = localStorage.getItem('user');
+export function getUser() {
+    const userJsonString = localStorage.getItem('user');
 
-    if (user) {
-        return user.accessToken;
+    if (userJsonString) {
+        return JSON.parse(userJsonString);
     }
 }
 
-export function authenticator(){
-    if (accessToken) {
+export function authenticator() {
+    const user = getUser();
+    clearSections();
+    if (user) {
+        welcomeMsgElement.textContent = `Welcome ${user.email}`
         userElements.forEach(el => el.style.display = 'block');
         guestElements.forEach(el => el.style.display = 'none');
     } else {

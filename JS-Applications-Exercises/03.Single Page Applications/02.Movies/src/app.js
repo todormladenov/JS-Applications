@@ -1,10 +1,8 @@
-import { authenticator } from "./auth.js";
 import { showHome } from "./home.js";
 import { router } from "./router.js";
 
 const navBarElement = document.querySelector('.navbar');
 showHome();
-authenticator();
 
 navBarElement.addEventListener('click', (e) => {
     e.preventDefault();

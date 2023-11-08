@@ -4,7 +4,6 @@ import { logout } from "./logout.js";
 import { showRegister } from "./register.js";
 
 const sections = document.querySelectorAll('.view-section');
-clearSections();
 
 const routs = {
     '/': showHome,
@@ -19,6 +18,6 @@ export function router(href) {
     rout();
 }
 
-function clearSections() {
+export function clearSections() {
     sections.forEach(section => section.remove());
 }
