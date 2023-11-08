@@ -11,3 +11,4 @@ export const getAllMovies = () => get(moviesUrl);
 export const registerRequest = (registerData) => post(registerUrl, registerData);
 export const logoutRequest = () => deleteReq(logoutUrl);
 export const addMovieRequest = (addMovieData) => post(moviesUrl, addMovieData);
+export const getMovieById = (id) => get(`${moviesUrl}/${id}`);

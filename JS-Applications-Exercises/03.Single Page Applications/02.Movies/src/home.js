@@ -36,7 +36,8 @@ function createMoviePreview(movieData) {
 
     element.querySelector('a').addEventListener('click', (e) => {
         e.preventDefault();
-        showDetails();
+        let id = e.currentTarget.dataset.id
+        showDetails(id);
     });
 
     movieListElement.appendChild(element);
