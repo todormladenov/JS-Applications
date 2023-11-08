@@ -1,5 +1,6 @@
 import { getAllMovies } from "./api.js";
 import { authenticator } from "./auth.js";
+import { showDetails } from "./details.js";
 
 const containerElement = document.getElementById('container');
 const homeSectionElement = document.getElementById('home-page');
@@ -32,6 +33,11 @@ function createMoviePreview(movieData) {
             <button type="button" class="btn btn-info">Details</button>
             </a>    
     </div>`;
+
+    element.querySelector('a').addEventListener('click', (e) => {
+        e.preventDefault();
+        showDetails();
+    });
 
     movieListElement.appendChild(element);
     return element;
