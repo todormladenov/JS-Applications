@@ -1,0 +1,16 @@
+import { authenticator } from "./auth.js";
+import { showHome } from "./home.js";
+import { router } from "./router.js";
+
+const navBarElement = document.querySelector('.navbar');
+showHome();
+authenticator();
+
+navBarElement.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    if (e.target.tagName == 'A') {
+        const url = new URL (e.target.href);
+        router(url.pathname);
+    }
+})
