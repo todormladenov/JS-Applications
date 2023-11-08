@@ -20,13 +20,15 @@ async function request(method, url, data) {
 
     try {
         let response = await fetch(url, options);
-        if (response.status != 200) {
-            let error = await response.json();
-            throw new Error(error.message);
-        }
+        if (method != 'DELETE') {
+            if (response.status != 200) {
+                let error = await response.json();
+                throw new Error(error.message);
+            }
 
-        let result = await response.json();
-        return result;
+            let result = await response.json();
+            return result;
+        }
     } catch (error) {
         alert(`Error: ${error.message}`)
     }
