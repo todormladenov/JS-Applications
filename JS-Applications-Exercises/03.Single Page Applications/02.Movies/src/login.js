@@ -23,7 +23,10 @@ async function login(e) {
     }
 
     let user = await loginRequest(data);
-    localStorage.setItem('user', JSON.stringify(user));
-    loginFormElement.reset();
-    showHome();
+
+    if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        loginFormElement.reset();
+        showHome();
+    }
 }
