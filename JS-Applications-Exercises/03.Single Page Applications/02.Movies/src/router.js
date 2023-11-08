@@ -1,3 +1,4 @@
+import { showCreate } from "./create.js";
 import { showHome } from "./home.js";
 import { showLogin } from "./login.js";
 import { logout } from "./logout.js";
@@ -9,7 +10,8 @@ const routs = {
     '/': showHome,
     '/login': showLogin,
     '/register': showRegister,
-    '/logout': logout
+    '/logout': logout,
+    '/create': showCreate
 }
 
 export function router(href) {
