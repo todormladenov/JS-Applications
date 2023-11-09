@@ -1,22 +1,32 @@
-import { deleteMovieRequest, getMovieById } from "./api.js";
-import { authenticator } from "./auth.js";
+import { deleteMovieRequest, getLikes, getMovieById, likeMovie } from "./api.js";
+import { authenticator, getUser } from "./auth.js";
+import { router } from "./router.js";
 
 const containerElement = document.getElementById('container');
 const detailsElement = document.getElementById('movie-example');
-const movieDescriptionElement = document.querySelector('.col-md-4');
 
-export function showDetails(id) {
-    authenticator();
-    detailsElement.innerHTML = '';
-    generateDetailsElement(id);
-    containerElement.appendChild(detailsElement);
-    
+const options = {
+    '/delete': deleteMovieRequest,
+    '/like': likeMovie
 }
 
-async function generateDetailsElement(id){
-    let movieData = await getMovieById(id);
+export function showDetails(movieId) {
+    authenticator();
+    detailsElement.innerHTML = '';
+    generateDetailsElement(movieId);
+    containerElement.appendChild(detailsElement);;
+}
+
+async function generateDetailsElement(movieId) {
+    let user = getUser();
+    const [movieData, likes, ownLike] = await Promise.all([
+        getMovieById(movieId),
+        getLikes(movieId),
+        getOwnLike(movieId, user)
+    ])
     let el = document.createElement('div');
     el.classList.add('container');
+    let isOwner = user && user._id == movieData._ownerId;
 
     el.innerHTML = `
         <div class="row bg-light text-dark">
@@ -29,12 +39,40 @@ async function generateDetailsElement(id){
           <div class="col-md-4 text-center">
             <h3 class="my-3">Movie Description</h3>
             <p>${movieData.description}</p>
-            <a class="btn btn-danger" href="/delete" data-id="${movieData._ownerId}">Delete</a>
-            <a class="btn btn-warning" href="/edit" data-id="${movieData._ownerId}">Edit</a>
-            <a class="btn btn-primary" href="/like" data-id="${movieData._ownerId}">Like</a>
-            <span class="enrolled-span">Liked 1</span>
+            <a class="btn btn-danger" href="/delete" data-id="${movieData._id}" style="display: ${isOwner ? "inline" : "none"}"}>Delete</a>
+            <a class="btn btn-warning" href="/edit" data-id="${movieData._id}" style="display: ${isOwner ? "inline" : "none"}"}>Edit</a>
+            <a class="btn btn-primary" href="/like" data-id="${movieData._id}" style="display: ${isOwner || !user || ownLike ? "none" : "inline"}"}>Like</a>
+            <span class="enrolled-span">Like ${likes}</span>
           </div>
         </div>`
-        detailsElement.appendChild(el);
+
+    el.querySelector('.col-md-4').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (e.target.tagName == 'A') {
+            const url = new URL(e.target.href);
+            let movieId = e.target.dataset.id;
+            let option = options[url.pathname];
+            option(movieId);
+            if (e.target.textContent == 'Delete') {
+                router('/');
+            } else {
+                showDetails(movieId);
+            }
+        }
+    });
+
+    detailsElement.appendChild(el);
 }
 
+async function getOwnLike(movieId, user) {
+    if (!user) {
+        return false
+    } else {
+        let userId = user._id
+        let response = await fetch(`http://localhost:3030/data/likes?where=movieId%3D%22${movieId}%22%20and%20_ownerId%3D%22${userId}%22`);
+        let like = await response.json();
+
+        return like.length > 0
+    }
+
+}
