@@ -34,7 +34,7 @@ function createMoviePreview(movieData) {
             </a>    
     </div>`;
 
-    element.querySelector('a').addEventListener('click', (e) => {
+        element.querySelector('a').addEventListener('click', (e) => {
         e.preventDefault();
         let id = e.currentTarget.dataset.id
         showDetails(id);

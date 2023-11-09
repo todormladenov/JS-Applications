@@ -14,6 +14,6 @@ export const logoutRequest = () => get(logoutUrl);
 export const addMovieRequest = (addMovieData) => post(moviesUrl, addMovieData);
 export const getMovieById = (movieId) => get(`${moviesUrl}/${movieId}`);
 export const deleteMovieRequest = (movieId) => deleteReq(`${moviesUrl}/${movieId}`);
-export const editMovieRequest = (movieId) => put(`${moviesUrl}/${movieId}`);
+export const editMovieRequest = (movieId, data) => put(`${moviesUrl}/${movieId}`, data);
 export const getLikes = (movieId) => get(`${baseUrl}/data/likes?where=movieId%3D%22${movieId}%22&distinct=_ownerId&count`);
 export const likeMovie = (movieId) => post(likeUrl, {movieId});

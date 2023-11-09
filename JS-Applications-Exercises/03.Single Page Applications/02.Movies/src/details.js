@@ -1,5 +1,6 @@
 import { deleteMovieRequest, getLikes, getMovieById, likeMovie } from "./api.js";
 import { authenticator, getUser } from "./auth.js";
+import { showEditMovie } from "./editMovie.js";
 import { router } from "./router.js";
 
 const containerElement = document.getElementById('container');
@@ -7,6 +8,7 @@ const detailsElement = document.getElementById('movie-example');
 
 const options = {
     '/delete': deleteMovieRequest,
+    '/edit': showEditMovie,
     '/like': likeMovie
 }
 
@@ -55,7 +57,7 @@ async function generateDetailsElement(movieId) {
             option(movieId);
             if (e.target.textContent == 'Delete') {
                 router('/');
-            } else {
+            } else if (e.target.textContent == 'Like'){
                 showDetails(movieId);
             }
         }
