@@ -4,7 +4,7 @@ async function request(method, url, data) {
     let options = {};
     let user = getUser();
 
-    if (method != 'GET' && method != 'Delete') {
+    if (method != 'GET' && method != 'DELETE') {
         options = {
             method,
             headers: {
@@ -12,15 +12,19 @@ async function request(method, url, data) {
             },
             body: JSON.stringify(data)
         }
+    } else if (method == 'DELETE') {
+        options = {
+            method,
+            headers: {}
+        }
     }
 
-    if (user && method != 'GET' && method != 'Delete') {
+    if (user && method != 'GET') {
         options.headers['X-Authorization'] = user.accessToken
     }
 
     try {
         let response = await fetch(url, options);
-        if (method != 'DELETE') {
             if (response.status != 200) {
                 let error = await response.json();
                 throw new Error(error.message);
@@ -28,7 +32,6 @@ async function request(method, url, data) {
 
             let result = await response.json();
             return result;
-        }
     } catch (error) {
         alert(`Error: ${error.message}`)
     }
