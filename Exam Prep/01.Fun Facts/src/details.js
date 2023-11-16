@@ -14,8 +14,8 @@ const detailsTemplate = (factData, isOwner, user, deleteFact, likes, sendLike, o
                     <p id ="more-info">${factData.moreInfo}</p>
                 </div>
                 <h3>Likes:<span id="likes">${likes}</span></h3>
-               ${isOwner ? html`
-               <div id="action-buttons">
+                <div id="action-buttons">
+                ${isOwner ? html`
                <a href="/edit/${factData._id}" id="edit-btn">Edit</a>
                <a href="javascript:void(0)" id="delete-btn" @click=${deleteFact}>Delete</a>` : null}
                 ${user && !isOwner && ownLike <= 0 ? html`
@@ -33,8 +33,10 @@ export async function detailsView(ctx) {
     render(detailsTemplate(factData, isOwner, user, deleteFact, likes, sendLike, ownLike), root);
 
     async function deleteFact() {
-        await createDeleteRequest(factId);
-        ctx.page.redirect('/dashboard');
+        if (confirm('Are you sure you want to delete this post?')) {
+            await createDeleteRequest(factId);
+            ctx.page.redirect('/dashboard');
+        }
     }
 
     async function sendLike() {
