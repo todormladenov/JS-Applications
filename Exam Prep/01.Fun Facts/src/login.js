@@ -31,10 +31,13 @@ export function loginView(ctx) {
         e.preventDefault();
 
         let formData = new FormData(e.target);
-        let email = formData.get('email');
-        let password = formData.get('password');
+        let email = formData.get('email').trim();
+        let password = formData.get('password').trim();
 
         try {
+          if (email == '' || password == '') {
+            throw new Error('All fields are required!')
+          }
             const user = await loginRequest({ email, password });
             localStorage.setItem('user', JSON.stringify(user));
             e.target.reset();
