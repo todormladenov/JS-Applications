@@ -6,6 +6,7 @@ import { editView } from "./edit.js";
 import { homeView } from "./home.js";
 import { loginView } from "./login.js";
 import { registerView } from "./register.js";
+import { logoutRequest } from "./requests.js";
 
 page(decorateContext);
 page('/', homeView);
@@ -38,7 +39,8 @@ function updateNavBar() {
     }
 }
 
-document.getElementById('logout-btn').addEventListener('click', () => {
+document.getElementById('logout-btn').addEventListener('click', async () => {
+    await logoutRequest();
     localStorage.clear();
     updateNavBar();
     page.redirect('/');
