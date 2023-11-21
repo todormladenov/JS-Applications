@@ -10,12 +10,14 @@ import * as renderMIddleware from "./render/renderMIddleware.js";
 import * as teamService from "./services/teamService.js";
 import * as memberService from "./services/memberService.js";
 import * as authService from "./services/authService.js";
+import * as myTeamPage from "./pages/myTeams.js";
 
 homePage.initialize(page, renderMIddleware.generate);
 loginPage.initialize(page, renderMIddleware.generate, authService);
 registerPage.initialize(page, renderMIddleware.generate, authService);
 createPage.initialize(page, renderMIddleware.generate, teamService);
 editPage.initialize(page, renderMIddleware.generate, teamService);
+myTeamPage.initialize(page, renderMIddleware.generate, teamService, memberService);
 browsePage.initialize(page, renderMIddleware.generate, teamService, memberService);
 detailsPage.initialize(page, renderMIddleware.generate, teamService, memberService);
 
@@ -26,6 +28,7 @@ page('/register', registerPage.registerView);
 page('/logout', authService.logout);
 page('/browse', browsePage.browseView);
 page('/create', createPage.createView); 
+page('/my-teams', myTeamPage.myTeamsView);
 page('/edit/:id', editPage.editView);
 page('/details/:id', detailsPage.detailsView);
 
