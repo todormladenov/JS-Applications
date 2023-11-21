@@ -1,5 +1,6 @@
 import { html, render } from "../../node_modules/lit-html/lit-html.js";
 import { navBarTemplate } from "../nav/navBar.js";
+import { getUser } from "../services/authService.js";
 
 const content = document.getElementById('content');
 const layout = (sectionTemplate) => html`
